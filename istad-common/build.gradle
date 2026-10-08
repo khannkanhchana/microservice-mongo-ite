@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'co.istad.kanhchana'
+group = 'kh.edu.istad.common'
 version = '1.0-SNAPSHOT'
 
 repositories {
