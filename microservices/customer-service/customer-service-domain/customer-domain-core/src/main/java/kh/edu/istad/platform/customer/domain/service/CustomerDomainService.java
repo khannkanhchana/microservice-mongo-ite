@@ -9,7 +9,9 @@ public interface CustomerDomainService {
 
     CustomerInitiatedEvent initiateCustomer(Customer customer);
 
-    CustomerUpdatedEvent updateCustomer(Customer customer);
+//    CustomerUpdatedEvent updateCustomer(Customer customer);
+
+    CustomerUpdatedEvent updateCustomer(Customer customer, String familyName, String givenName);
 
     CustomerDeactivatedEvent deactivateCustomer(Customer customer);
 }
