@@ -1,78 +1,3 @@
-//
-//package kh.edu.istad.platform.customer.persistence.mapper;
-//
-//import kh.edu.istad.platform.customer.domain.entity.Customer;
-//import kh.edu.istad.platform.customer.persistence.document.CustomerDocument;
-//import org.mapstruct.InheritInverseConfiguration;
-//import org.mapstruct.Mapper;
-//import org.mapstruct.Mapping;
-//import org.mapstruct.MappingConstants;
-//
-//
-//@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-//public interface CustomerPersistenceMapper {
-//
-//
-//    @Mapping(source = "id.value", target = "id")
-//    @Mapping(source = "email.value", target = "email")
-//    @Mapping(source = "phoneNumber.value", target = "phoneNumber")
-//    CustomerDocument  toDocument(Customer customer);
-//
-//
-////    @Mapping(source = "id", target = "id.value")
-////    @Mapping(source = "email", target = "email.value")
-////    @Mapping(source = "phoneNumber", target = "phoneNumber.value")
-//
-//    @InheritInverseConfiguration
-//    Customer toDomain(CustomerDocument customerDocument);
-//
-//
-//
-////    @Mapping(target = "customerId", source = "id.id")
-////    @Mapping(target = "email", source = "email.email")
-////    @Mapping(target = "phoneNumber", source = "phoneNumber.phoneNumber")
-////    @Mapping(target = "createdBy", ignore = true)
-////    @Mapping(target = "createdAt", ignore = true)
-////    @Mapping(target = "modifiedBy", ignore = true)
-////    @Mapping(target = "modifiedAt", ignore = true)
-//////    CustomerEntity toEntity(Customer customer);
-////
-////    @Mapping(target = "id", source = "customerId")
-////    void mapToBuilder(
-////            CustomerEntity entity,
-////            @MappingTarget Customer.Builder builder
-////    );
-////
-////    default Customer toDomain(CustomerEntity entity) {
-////        Customer.Builder builder = Customer.Builder.builder();
-////        mapToBuilder(entity, builder);
-////        return builder.build();
-////    }
-////
-////    default CustomerId toCustomerId(UUID id) {
-////        return id == null ? null : new CustomerId(id);
-////    }
-////
-////    default Email toEmail(String value) {
-////        return value == null ? null : new Email(value);
-////    }
-////
-////    default PhoneNumber toPhoneNumber(String value) {
-////        return value == null ? null : new PhoneNumber(value);
-////    }
-//}
-//
-////@Mapper(componentModel = "spring")
-////public interface CustomerPersistenceMapper {
-////        CustomerDocument toDocument(Customer customer);
-////
-////        Customer toDomain(CustomerDocument customerDocument);
-////
-////}
-//
-
-
-
 package kh.edu.istad.platform.customer.persistence.mapper;
 
 import kh.edu.istad.common.domain.valueobject.CustomerId;
@@ -89,6 +14,7 @@ import java.util.UUID;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CustomerPersistenceMapper {
 
+    // Convert Customer Domain Entity to MongoDB Document
     default CustomerDocument toDocument(Customer customer) {
         if (customer == null) {
             return null;
@@ -107,10 +33,12 @@ public interface CustomerPersistenceMapper {
                 .phoneNumber(customer.getPhoneNumber() == null
                         ? null
                         : customer.getPhoneNumber().value())
+                .segmentId(customer.getSegmentId())
                 .status(customer.getStatus())
                 .build();
     }
 
+    // Convert MongoDB Document to Customer Domain Entity
     default Customer toDomain(CustomerDocument document) {
         if (document == null) {
             return null;
@@ -137,7 +65,11 @@ public interface CustomerPersistenceMapper {
                 .givenName(document.getGivenName())
                 .email(email)
                 .phoneNumber(phoneNumber)
+                .segmentId(document.getSegmentId())
                 .status(status)
                 .build();
     }
 }
+
+
+

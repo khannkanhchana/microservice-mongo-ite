@@ -76,6 +76,10 @@ public interface CustomerWebMapper {
 
     CustomerInitiateResponse toResponse(InitiateCustomerResult result);
 
+    default CustomerResponse toResponse(Customer customer) {
+        return toCustomerResponse(customer);
+    }
+
     default Customer toDomain(CreateCustomerRequest request) {
         if (request == null) {
             return null;

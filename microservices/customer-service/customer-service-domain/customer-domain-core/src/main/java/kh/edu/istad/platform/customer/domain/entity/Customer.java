@@ -17,6 +17,7 @@ public class Customer extends AggregateRoot<CustomerId> {
     private final Email email;
     private final PhoneNumber phoneNumber;
     private CustomerStatus status;
+    private String segmentId;
 
     private Customer(Builder builder) {
         super.setId(builder.id);
@@ -26,6 +27,7 @@ public class Customer extends AggregateRoot<CustomerId> {
         email = builder.email;
         phoneNumber = builder.phoneNumber;
         status = builder.status;
+        segmentId = builder.segmentId;
     }
 
 
@@ -61,7 +63,13 @@ public class Customer extends AggregateRoot<CustomerId> {
         }
         status = CustomerStatus.INACTIVE;
     }
+
+    public String getSegmentId() {
+        return segmentId;
+    }
+
     public static final class Builder {
+        public String segmentId;
         private CustomerId id;
         private String username;
         private String familyName;
@@ -111,6 +119,14 @@ public class Customer extends AggregateRoot<CustomerId> {
             status = val;
             return this;
         }
+        public Builder segmentId(String val) {
+            segmentId = val;
+            return this;
+        }
+
+        public String getSegmentId() {
+            return segmentId;
+        }
 
         public Customer build() {
             return new Customer(this);
@@ -145,4 +161,5 @@ public class Customer extends AggregateRoot<CustomerId> {
     public CustomerStatus getStatus() {
         return status;
     }
+
 }

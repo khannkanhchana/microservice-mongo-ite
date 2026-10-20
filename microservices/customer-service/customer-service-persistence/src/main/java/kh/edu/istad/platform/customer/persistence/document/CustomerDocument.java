@@ -44,4 +44,6 @@ public class CustomerDocument implements Persistable<String> {
     public boolean isNew() {
         return createdAt == null;
     }
+
+    private String segmentId;
 }

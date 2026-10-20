@@ -6,6 +6,8 @@ import kh.edu.istad.platform.customer.domain.dto.UpdateCustomerCommand;
 import kh.edu.istad.platform.customer.domain.entity.Customer;
 import kh.edu.istad.platform.customer.domain.event.CustomerDeactivatedEvent;
 import kh.edu.istad.platform.customer.domain.usecase.*;
+import kh.edu.istad.platform.customer.persistence.dto.CustomerStatisticsData;
+import kh.edu.istad.platform.customer.domain.usecase.GetCustomerStatisticsUseCase;
 import kh.edu.istad.platform.customer.restapi.dto.*;
 import kh.edu.istad.platform.customer.restapi.mapper.CustomerWebMapper;
 import kh.edu.istad.platform.customer.domain.dto.InitiateCustomerResult;
@@ -13,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
+
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -22,6 +26,12 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springdoc.core.annotations.ParameterObject;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import reactor.core.publisher.Flux;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,10 +44,11 @@ public class CustomerController {
     private final GetCustomerByIdUseCase getCustomerByIdUseCase;
     private final UpdateCustomerUseCase updateCustomerUseCase;
     private final DeleteCustomerUseCase deleteCustomerUseCase;
-
+    private final GetCustomerStatisticsUseCase getCustomerStatisticsUseCase;
 
 
     private final QueryCustomerUseCase queryCustomerUseCase;
+    private final FilterCustomersUseCase filterCustomersUseCase;
 
 
     @PostMapping
@@ -106,6 +117,18 @@ public class CustomerController {
                                 ex.getMessage()
                         )
                 );
+
+    }
+    @GetMapping("/filter")
+    public Flux<CustomerResponse> filter(
+            @RequestParam Map<String, String> filters
+    ) {
+        return filterCustomersUseCase.execute(filters)
+                .map(customerWebMapper::toResponse);
+    }
+    @GetMapping("/statistics")
+    public Mono<CustomerStatisticsData> getStatistics() {
+        return getCustomerStatisticsUseCase.execute();
     }
 
 
