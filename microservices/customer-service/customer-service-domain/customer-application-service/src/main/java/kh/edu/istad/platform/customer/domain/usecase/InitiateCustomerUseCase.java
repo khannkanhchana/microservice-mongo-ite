@@ -22,35 +22,37 @@ public class InitiateCustomerUseCase {
     private final CustomerRepository customerRepository;
     public InitiateCustomerResult execute(InitiateCustomerCommand command){
         log.info("initiatete customer usecase:{}", command);
+        customerRepository.save(null);
+        return new InitiateCustomerResult(UUID.randomUUID(), command.username(), command.familyName(), command.givenName(), command.email(), command.phoneNumber());
         // validate by load data from persistence (Output port)
 
         // TODO : Note for my self
         //1. Build the domain customer from the request data
-        Customer customer = Customer.Builder.builder()
-                .username(command.username())
-                .familyName(command.familyName())
-                .givenName(command.givenName())
-                .email(new Email(command.email()))
-                .phoneNumber(new PhoneNumber(command.phoneNumber()))
-                .build();
-
-        // 2. Generate the Customer ID and set status to ACTIVE
-        customerDomainService.initiateCustomer(customer);
-
-
-        // 3. Store the customer in the in memory-map Map that has been created already
-        Customer saveCustomer = customerRepository.save(customer);
-
-
-        // invoke domain logic (called domain service)
-        // save data into database (output port)
-        return new InitiateCustomerResult(
-                saveCustomer.getId().id(),
-                saveCustomer.getUsername(),
-                saveCustomer.getFamilyName(),
-                saveCustomer.getGivenName(),
-                saveCustomer.getEmail().email(),
-                saveCustomer.getPhoneNumber().phoneNumber()
-        );
+//        Customer customer = Customer.Builder.builder()
+//                .username(command.username())
+//                .familyName(command.familyName())
+//                .givenName(command.givenName())
+//                .email(new Email(command.email()))
+//                .phoneNumber(new PhoneNumber(command.phoneNumber()))
+//                .build();
+//
+//        // 2. Generate the Customer ID and set status to ACTIVE
+//        customerDomainService.initiateCustomer(customer);
+//
+//
+//        // 3. Store the customer in the in memory-map Map that has been created already
+//        Customer saveCustomer = customerRepository.save(customer);
+//
+//
+//        // invoke domain logic (called domain service)
+//        // save data into database (output port)
+//        return new InitiateCustomerResult(
+//                saveCustomer.getId().id(),
+//                saveCustomer.getUsername(),
+//                saveCustomer.getFamilyName(),
+//                saveCustomer.getGivenName(),
+//                saveCustomer.getEmail().email(),
+//                saveCustomer.getPhoneNumber().phoneNumber()
+//        );
     }
 }

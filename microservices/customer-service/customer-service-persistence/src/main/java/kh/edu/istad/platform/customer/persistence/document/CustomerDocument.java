@@ -1,0 +1,42 @@
+package kh.edu.istad.platform.customer.persistence.document;
+
+
+import kh.edu.istad.common.domain.valueobject.CustomerId;
+import kh.edu.istad.platform.customer.domain.valueobject.CustomerStatus;
+import kh.edu.istad.platform.customer.domain.valueobject.Email;
+import kh.edu.istad.platform.customer.domain.valueobject.PhoneNumber;
+import lombok.*;
+import org.springframework.data.annotation.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.Instant;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Document
+
+public class CustomerDocument {
+
+    @Id
+    private String id;
+    private String username;
+    private String familyName;
+    private String givenName;
+    private String email;
+    private String phoneNumber;
+    private CustomerStatus status;
+
+    @CreatedBy
+    private String createdBy;
+    @CreatedDate
+    private Instant createdAt;
+
+    @LastModifiedBy
+    private String modifiedBy;
+    @LastModifiedDate
+    private String modifiedAt;
+
+}

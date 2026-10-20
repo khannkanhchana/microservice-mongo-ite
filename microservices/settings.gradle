@@ -1,4 +1,5 @@
 rootProject.name = 'istad-common'
 includeBuild 'business-service'
 includeBuild 'customer-service'
+includeBuild 'order-service'
 

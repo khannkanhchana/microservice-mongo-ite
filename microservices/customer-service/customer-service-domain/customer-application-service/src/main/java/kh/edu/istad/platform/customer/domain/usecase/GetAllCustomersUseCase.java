@@ -13,7 +13,7 @@ public class GetAllCustomersUseCase {
 
     private final CustomerRepository customerRepository;
 
-    public Page<Customer> execute(Pageable pageable) {
-        return customerRepository.findAll(pageable);
-    }
+//    public Page<Customer> execute(Pageable pageable) {
+//        return customerRepository.findAll(pageable);
+//    }
 }
