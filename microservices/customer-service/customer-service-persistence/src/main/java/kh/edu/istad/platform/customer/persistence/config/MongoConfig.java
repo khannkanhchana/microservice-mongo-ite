@@ -8,9 +8,11 @@ import kh.edu.istad.platform.customer.persistence.convert.EmailReadConverter;
 import kh.edu.istad.platform.customer.persistence.convert.EmailWriteConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 
 @Configuration
+@EnableReactiveMongoAuditing(auditorAwareRef = "auditorAwareConfig")
 public class MongoConfig {
 
     @Bean

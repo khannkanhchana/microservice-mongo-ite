@@ -7,6 +7,7 @@ import kh.edu.istad.platform.customer.domain.valueobject.Email;
 import kh.edu.istad.platform.customer.domain.valueobject.PhoneNumber;
 import lombok.*;
 import org.springframework.data.annotation.*;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
@@ -18,7 +19,7 @@ import java.time.Instant;
 @Builder
 @Document
 
-public class CustomerDocument {
+public class CustomerDocument implements Persistable<String> {
 
     @Id
     private String id;
@@ -39,4 +40,8 @@ public class CustomerDocument {
     @LastModifiedDate
     private String modifiedAt;
 
+    @Override
+    public boolean isNew() {
+        return createdAt == null;
+    }
 }

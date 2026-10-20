@@ -31,31 +31,15 @@ public class CustomerController {
     private final InitiateCustomerUseCase initiateCustomerUseCase;
     private final CreateCustomerUseCase createCustomerUseCase;
     private final CustomerWebMapper customerWebMapper;
-//    private final UpdateCustomerUseCase updateCustomerUseCase;
-//    private final DeactivateCustomerUseCase deactivateCustomerUseCase;
-//    private final GetAllCustomersUseCase getAllCustomersUseCase;
+    private final GetCustomerByIdUseCase getCustomerByIdUseCase;
+    private final UpdateCustomerUseCase updateCustomerUseCase;
+    private final DeleteCustomerUseCase deleteCustomerUseCase;
+
+
 
     private final QueryCustomerUseCase queryCustomerUseCase;
 
-//    @GetMapping
-//    public PagedModel<CustomerResponse> getAllCustomers(
-//            @ParameterObject
-//            @PageableDefault(page = 0, size = 15, sort = "customerId")
-//            Pageable pageable
-//    ){
-//        var customers = getAllCustomersUseCase.execute(pageable);
-//        var responses = customers.map(customerWebMapper::toResponse);
-//
-//        return new PagedModel<>(responses);
-//    }
 
-//    @ResponseStatus(HttpStatus.CREATED)
-//    @PostMapping
-//    public CustomerInitiateResponse initiateResponse(@Valid @RequestBody CustomerInitiateRequest customerInitiateRequest){
-//        InitiateCustomerResult result = initiateCustomerUseCase.execute(customerWebMapper.toCommand(customerInitiateRequest));
-//
-//        return customerWebMapper.toResponse(result);
-//    }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<CustomerResponse> create(
@@ -70,6 +54,58 @@ public class CustomerController {
     @GetMapping
     public Flux<Customer> findAll() {
         return queryCustomerUseCase.findAll();
+    }
+
+    @GetMapping( "/query")
+    public Flux<Customer> query() {
+        return queryCustomerUseCase.query();
+    }
+    @GetMapping("/{customerId}")
+    public Mono<Customer> findById(
+            @PathVariable UUID customerId
+    ) {
+        return getCustomerByIdUseCase.execute(customerId)
+                .switchIfEmpty(Mono.error(
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Customer not found: " + customerId
+                        )
+                ));
+    }
+
+    @PutMapping("/{customerId}")
+    public Mono<Customer> update(
+            @PathVariable UUID customerId,
+            @Valid @RequestBody CustomerUpdateRequest request
+    ) {
+        UpdateCustomerCommand command = new UpdateCustomerCommand(
+                customerId,
+                request.familyName(),
+                request.givenName()
+        );
+
+        return updateCustomerUseCase.execute(command)
+                .switchIfEmpty(Mono.error(
+                        new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                "Customer not found: " + customerId
+                        )
+                ));
+    }
+
+    @DeleteMapping("/{customerId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> delete(
+            @PathVariable UUID customerId
+    ) {
+        return deleteCustomerUseCase.execute(customerId)
+                .onErrorMap(
+                        IllegalArgumentException.class,
+                        ex -> new ResponseStatusException(
+                                HttpStatus.NOT_FOUND,
+                                ex.getMessage()
+                        )
+                );
     }
 
 

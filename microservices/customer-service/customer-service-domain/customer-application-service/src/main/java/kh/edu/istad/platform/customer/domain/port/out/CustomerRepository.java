@@ -16,6 +16,15 @@ public interface CustomerRepository {
 
     Flux<Customer> findAll();
 
+    Mono<Customer> findById(CustomerId id);
+
+    Mono<Void> deleteById(CustomerId id);
+
+    Mono<Customer> findByUsername(String username);
+
+    Flux<Customer> query();
+
+
 //    Optional<Customer> findById(CustomerId customerId);
 //
 //    Page<Customer> findAll(Pageable pageable);
