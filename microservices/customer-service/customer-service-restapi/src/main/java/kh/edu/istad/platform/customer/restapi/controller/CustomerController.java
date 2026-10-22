@@ -4,13 +4,11 @@ package kh.edu.istad.platform.customer.restapi.controller;
 import jakarta.validation.Valid;
 import kh.edu.istad.platform.customer.domain.dto.UpdateCustomerCommand;
 import kh.edu.istad.platform.customer.domain.entity.Customer;
-import kh.edu.istad.platform.customer.domain.event.CustomerDeactivatedEvent;
 import kh.edu.istad.platform.customer.domain.usecase.*;
-import kh.edu.istad.platform.customer.persistence.dto.CustomerStatisticsData;
+import kh.edu.istad.platform.customer.domain.dto.CustomerStatistics;
 import kh.edu.istad.platform.customer.domain.usecase.GetCustomerStatisticsUseCase;
 import kh.edu.istad.platform.customer.restapi.dto.*;
 import kh.edu.istad.platform.customer.restapi.mapper.CustomerWebMapper;
-import kh.edu.istad.platform.customer.domain.dto.InitiateCustomerResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,19 +17,13 @@ import java.util.Map;
 import java.util.UUID;
 
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.data.web.PagedModel;
 import org.springframework.web.server.ResponseStatusException;
-import org.springdoc.core.annotations.ParameterObject;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import reactor.core.publisher.Flux;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -127,7 +119,7 @@ public class CustomerController {
                 .map(customerWebMapper::toResponse);
     }
     @GetMapping("/statistics")
-    public Mono<CustomerStatisticsData> getStatistics() {
+    public Mono<CustomerStatistics> getStatistics() {
         return getCustomerStatisticsUseCase.execute();
     }
 
